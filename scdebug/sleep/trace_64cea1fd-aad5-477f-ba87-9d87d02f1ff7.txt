@@ -1,0 +1,53 @@
+execve("/bin/sleep", ["sleep"], 0x7ffe7af97c70 /* 66 vars */) = 0
+brk(NULL)                               = 0x55e9ccf90000
+access("/etc/ld.so.nohwcap", F_OK)      = -1 ENOENT (No such file or directory)
+access("/etc/ld.so.preload", R_OK)      = -1 ENOENT (No such file or directory)
+openat(AT_FDCWD, "/etc/ld.so.cache", O_RDONLY|O_CLOEXEC) = 3
+fstat(3, {st_mode=S_IFREG|0644, st_size=228948, ...}) = 0
+mmap(NULL, 228948, PROT_READ, MAP_PRIVATE, 3, 0) = 0x7f0bd4eea000
+close(3)                                = 0
+access("/etc/ld.so.nohwcap", F_OK)      = -1 ENOENT (No such file or directory)
+openat(AT_FDCWD, "/lib/x86_64-linux-gnu/libc.so.6", O_RDONLY|O_CLOEXEC) = 3
+read(3, "\177ELF\2\1\1\3\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0\240\35\2\0\0\0\0\0"..., 832) = 832
+fstat(3, {st_mode=S_IFREG|0755, st_size=2030928, ...}) = 0
+mmap(NULL, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f0bd4ee8000
+mmap(NULL, 4131552, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0x7f0bd4908000
+mprotect(0x7f0bd4aef000, 2097152, PROT_NONE) = 0
+mmap(0x7f0bd4cef000, 24576, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x1e7000) = 0x7f0bd4cef000
+mmap(0x7f0bd4cf5000, 15072, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x7f0bd4cf5000
+close(3)                                = 0
+arch_prctl(ARCH_SET_FS, 0x7f0bd4ee9540) = 0
+mprotect(0x7f0bd4cef000, 16384, PROT_READ) = 0
+mprotect(0x55e9cbfac000, 4096, PROT_READ) = 0
+mprotect(0x7f0bd4f22000, 4096, PROT_READ) = 0
+munmap(0x7f0bd4eea000, 228948)          = 0
+brk(NULL)                               = 0x55e9ccf90000
+brk(0x55e9ccfb1000)                     = 0x55e9ccfb1000
+openat(AT_FDCWD, "/usr/lib/locale/locale-archive", O_RDONLY|O_CLOEXEC) = 3
+fstat(3, {st_mode=S_IFREG|0644, st_size=5586544, ...}) = 0
+mmap(NULL, 5586544, PROT_READ, MAP_PRIVATE, 3, 0) = 0x7f0bd43b4000
+close(3)                                = 0
+openat(AT_FDCWD, "/usr/share/locale/locale.alias", O_RDONLY|O_CLOEXEC) = 3
+fstat(3, {st_mode=S_IFREG|0644, st_size=2995, ...}) = 0
+read(3, "# Locale name alias data base.\n#"..., 4096) = 2995
+read(3, "", 4096)                       = 0
+close(3)                                = 0
+openat(AT_FDCWD, "/usr/share/locale/es_ES/LC_MESSAGES/coreutils.mo", O_RDONLY) = -1 ENOENT (No such file or directory)
+openat(AT_FDCWD, "/usr/share/locale/es/LC_MESSAGES/coreutils.mo", O_RDONLY) = -1 ENOENT (No such file or directory)
+openat(AT_FDCWD, "/usr/share/locale-langpack/es_ES/LC_MESSAGES/coreutils.mo", O_RDONLY) = -1 ENOENT (No such file or directory)
+openat(AT_FDCWD, "/usr/share/locale-langpack/es/LC_MESSAGES/coreutils.mo", O_RDONLY) = 3
+fstat(3, {st_mode=S_IFREG|0644, st_size=279113, ...}) = 0
+mmap(NULL, 279113, PROT_READ, MAP_PRIVATE, 3, 0) = 0x7f0bd4ea3000
+close(3)                                = 0
+openat(AT_FDCWD, "/usr/lib/x86_64-linux-gnu/gconv/gconv-modules.cache", O_RDONLY) = 3
+fstat(3, {st_mode=S_IFREG|0644, st_size=26376, ...}) = 0
+mmap(NULL, 26376, PROT_READ, MAP_SHARED, 3, 0) = 0x7f0bd4f1b000
+close(3)                                = 0
+write(2, "sleep: ", 7)                  = 7
+write(2, "falta un operando", 17)       = 17
+write(2, "\n", 1)                       = 1
+write(2, "Pruebe 'sleep --help' para m\303\241s "..., 46) = 46
+close(1)                                = 0
+close(2)                                = 0
+exit_group(1)                           = ?
++++ exited with 1 +++
