@@ -1,0 +1,53 @@
+--- stopped by SIGSTOP ---
+--- SIGCONT {si_signo=SIGCONT, si_code=SI_USER, si_pid=43128, si_uid=1000} ---
+write(1, "Lista de programa es sleep 10 \n", 31) = 31
+write(1, "La funci\303\263n 'prog' fue llamada c"..., 53) = 53
+newfstatat(AT_FDCWD, "scdebug", {st_mode=S_IFDIR|0775, st_size=4096, ...}, 0) = 0
+write(1, "La carpeta scdebug existe.\n", 27) = 27
+newfstatat(AT_FDCWD, "scdebug/sleep", {st_mode=S_IFDIR|0775, st_size=4096, ...}, 0) = 0
+write(1, "La carpeta sleep existe.\n", 25) = 25
+rt_sigprocmask(SIG_BLOCK, NULL, [], 8)  = 0
+pipe2([3, 4], 0)                        = 0
+rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+rt_sigprocmask(SIG_BLOCK, NULL, [], 8)  = 0
+rt_sigprocmask(SIG_BLOCK, [INT TERM CHLD], [], 8) = 0
+lseek(255, -1, SEEK_CUR)                = 11729
+clone(child_stack=NULL, flags=CLONE_CHILD_CLEARTID|CLONE_CHILD_SETTID|SIGCHLD, child_tidptr=0x7fd865bfea10) = 43150
+rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+rt_sigaction(SIGCHLD, {sa_handler=0x563536c64d10, sa_mask=[], sa_flags=SA_RESTORER|SA_RESTART, sa_restorer=0x7fd865842520}, {sa_handler=0x563536c64d10, sa_mask=[], sa_flags=SA_RESTORER|SA_RESTART, sa_restorer=0x7fd865842520}, 8) = 0
+close(4)                                = 0
+rt_sigprocmask(SIG_BLOCK, [INT], [], 8) = 0
+read(3, "7efcded1-7144-48c7-9972-aaf07674"..., 512) = 37
+--- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED, si_pid=43150, si_uid=1000, si_status=0, si_utime=0, si_stime=0} ---
+wait4(-1, [{WIFEXITED(s) && WEXITSTATUS(s) == 0}], WNOHANG, NULL) = 43150
+wait4(-1, 0x7fff31295290, WNOHANG, NULL) = -1 ECHILD (No child processes)
+rt_sigreturn({mask=[INT]})              = 37
+read(3, "", 512)                        = 0
+close(3)                                = 0
+rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+rt_sigaction(SIGINT, {sa_handler=0x563536c66dc0, sa_mask=[], sa_flags=SA_RESTORER, sa_restorer=0x7fd865842520}, {sa_handler=SIG_DFL, sa_mask=[], sa_flags=SA_RESTORER, sa_restorer=0x7fd865842520}, 8) = 0
+rt_sigaction(SIGINT, {sa_handler=SIG_DFL, sa_mask=[], sa_flags=SA_RESTORER, sa_restorer=0x7fd865842520}, {sa_handler=0x563536c66dc0, sa_mask=[], sa_flags=SA_RESTORER, sa_restorer=0x7fd865842520}, 8) = 0
+rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+write(1, "strace   -o scdebug/sleep/trace_"..., 82) = 82
+rt_sigprocmask(SIG_BLOCK, NULL, [], 8)  = 0
+rt_sigprocmask(SIG_BLOCK, [INT TERM CHLD], [], 8) = 0
+rt_sigprocmask(SIG_BLOCK, [CHLD], [INT TERM CHLD], 8) = 0
+rt_sigprocmask(SIG_SETMASK, [INT TERM CHLD], NULL, 8) = 0
+clone(child_stack=NULL, flags=CLONE_CHILD_CLEARTID|CLONE_CHILD_SETTID|SIGCHLD, child_tidptr=0x7fd865bfea10) = 43151
+rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+rt_sigprocmask(SIG_BLOCK, [CHLD], [CHLD], 8) = 0
+rt_sigprocmask(SIG_SETMASK, [CHLD], NULL, 8) = 0
+rt_sigprocmask(SIG_BLOCK, [CHLD], [CHLD], 8) = 0
+rt_sigprocmask(SIG_SETMASK, [CHLD], NULL, 8) = 0
+rt_sigprocmask(SIG_BLOCK, [CHLD], [CHLD], 8) = 0
+rt_sigprocmask(SIG_SETMASK, [CHLD], NULL, 8) = 0
+rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+read(255, "\n", 8192)                   = 1
+read(255, "", 8192)                     = 0
+rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+exit_group(0)                           = ?
++++ exited with 0 +++

@@ -14,6 +14,10 @@ pattchvar="-p "
 killlist= 
 uuid=
 modi_date=
+g_option=false
+gc_option=false
+ge_option=false
+lista_g=
 
 ##### Constantes
 TITLE="Información del sistema para $HOSTNAME" # $HOSTNAME muestra el nombre del host
@@ -47,7 +51,7 @@ usage2()
 
 
 ejecutable_base(){
-  echo "la uuid es $uuid "
+  #echo "la uuid es $uuid "
   strace $stovar $@  2>&1 | tee -a scdebug/$1/trace_$uuid.txt # ejecutar el comando 
 }
 
@@ -55,7 +59,7 @@ programa() {
   primeraBarrerra $1
 
   uuid=$(uuidgen)
-  echo "strace $stovar  -o scdebug/$1/trace_$uuid.txt $@" 
+  #echo "strace $stovar  -o scdebug/$1/trace_$uuid.txt $@" 
   ejecutable_base $@ & 
 }
 
@@ -67,22 +71,22 @@ nattch(){ # esta funcion si funciona
 
     # nattchvar="-p $PID"
   primeraBarrerra $1
-  echo "debug var1: $1"
+  #echo "debug var1: $1"
   # echo $(ps aux | grep $1 | sort -k 4 | grep $USER | tail -n 4 | head -n 1 | tr -s ' ' | cut -d ' ' -f2  )
   # PID= $(ps aux | grep $1 | sort -k 4 | grep $USER | tail -n 4 | head -n 1 | tr -s ' ' | cut -d ' ' -f2  )
 
-  echo $(ps aux | grep $1 | sort -k 4 | tail -n 4 | head -n 1 | tr -s ' ' | cut -d ' ' -f2  )
+  #echo $(ps aux | grep $1 | sort -k 4 | tail -n 4 | head -n 1 | tr -s ' ' | cut -d ' ' -f2  )
   PID=$( ps aux | grep $1 | sort -k 4 | tail -n 4 | head -n 1 | tr -s ' ' | cut -d ' ' -f2  )
 
 
-  echo "PID es $PID"
+  #echo "PID es $PID"
 
   nattchvar="-p $PID"
-  echo "nattchvar es $nattchvar"
+  #echo "nattchvar es $nattchvar"
 
   uuid=$(uuidgen)
-  echo "uuid es $uuid"
-  echo "strace $stovar $nattchvar -o scdebug/$1/trace_$uuid.txt &"
+  #echo "uuid es $uuid"
+  #echo "strace $stovar $nattchvar -o scdebug/$1/trace_$uuid.txt &"
   $(strace $stovar -p $PID | tee -a scdebug/$1/trace_$uuid.txt)
 }
 
@@ -122,9 +126,9 @@ kill1(){ # funciona en maquina ajena, pero no en la local
       tracer_pid=$(awk -F'\t' '/TracerPid/{print $2}' "/proc/$pid/status")
       #echo "entra en kill1"
       if [ "$tracer_pid" -ne 0 ]; then
-        echo "kill -s SIGKILL $tracer_pid"
+        #echo "kill -s SIGKILL $tracer_pid"
         kill -s SIGKILL $tracer_pid &> /dev/null
-        echo "kill -s SIGKILL $pid"
+        #echo "kill -s SIGKILL $pid"
         kill -s SIGKILL $pid &> /dev/null
       fi
     fi
@@ -211,11 +215,11 @@ VALL(){
 }
 
 STOP (){ # el apratado 1 basicamnte, no funciona btw
-  echo "echo -n "traced_$1" > /proc/$$/comm"
+  #echo "echo -n "traced_$1" > /proc/$$/comm"
   echo -n traced_$1 > /proc/$$/comm
 
 
-  echo "kill -SIGSTOP $$"
+  #echo "kill -SIGSTOP $$"
   kill -SIGSTOP $$
 
   # echo "exec $listaProg"
@@ -242,6 +246,54 @@ check_strace_availability() {
     fi
 }
 
+llamada(){
+  #echo "llamada $1"
+  #echo "strace -p $1 -o scdebug/$1/trace_$uidd.txt | tee -a scdebug/$1/trace_$uidd.txt"
+  strace -p $1 -o scdebug/$1/trace_$uidd.txt | tee -a scdebug/$1/trace_$uidd.txt
+}
+
+funtion_G(){ #debe funcionar, no está comprobado
+
+  lista_g=$(ps | grep traced_ | tr -s ' ' | cut -d ' ' -f2 | tr -s '\n' ' ')
+  #echo $lista_g
+
+  for i in $lista_g; do
+    primeraBarrerra $i
+    uuid=$(uuidgen)
+    #echo "uidd es $uuid"
+    llamada $i &
+    sleep 1
+    kill -SIGCONT $i
+  done
+
+}
+
+
+llamada2(){
+  #echo "llamada $1"
+  #echo "strace -p $1 -c -U | tee -a scdebug/$1/trace_$uuid.txt"
+  $(strace -p $1 -c -U name,max-time,total-time,calls | tee -a scdebug/$1/trace_$uidd.txt)
+}
+
+funtion_GC(){ #debe funcionar, no está comprobado
+
+  lista_g=$(ps | grep traced_ | tr -s ' ' | cut -d ' ' -f2 | tr -s '\n' ' ')
+  #echo $lista_g
+
+  for i in $lista_g; do
+    #echo ${TEXT_GREEN} "Proceso $i" ${TEXT_RESET}
+    primeraBarrerra $i
+    uuid=$(uuidgen)
+    #echo "${TEXT_GREEN}uidd es $uuid ${TEXT_RESET}"
+    llamada2 $i &
+    sleep 1
+    kill -SIGCONT $i
+  done
+
+}
+
+
+
 
 # check_strace_availability
 # check_uuidgen_availability
@@ -254,7 +306,7 @@ while [ "$1" != "" ]; do
             ;;         
         -sto )   
           stovar="$2"
-          echo "sto es $stovar"
+          #echo "sto es $stovar"
           ;;   
         -nattch )  
           if [ "$2" == "" ]; then
@@ -318,6 +370,15 @@ while [ "$1" != "" ]; do
             STOP "$2"
             shift
           ;;
+        -g )
+          g_option=true
+          ;;
+        -gc )
+          gc_option=true
+          ;;
+        -ge )
+          ge_option=true
+          ;;
         * )   if [ "$leelista" -ne 1 -a "$leeProg" -ne 2 ]; then
 		      leeProg=1
 		      listaProg+="$1 "
@@ -327,7 +388,7 @@ while [ "$1" != "" ]; do
                 usage2
                 exit 1
             fi
-        ;;             
+          ;;             
     esac
     shift
 done
@@ -338,6 +399,27 @@ done
 #     echo "Lista es $lista"
 #     programa $lista
 # fi
+
+if [[ $g_option == true && ($gc_option == true || $ge_option == true) ]] ||
+   [[ $gc_option == true && ($g_option == true || $ge_option == true) ]] ||
+   [[ $ge_option == true && ($g_option == true || $gc_option == true) ]]; then
+  echo "Debes especificar solo una de las opciones -g, -gc o -ge"
+  exit 1
+fi
+
+if [ $g_option == true ]; then
+  echo "Opcion -g"
+  funtion_G 
+fi
+
+if [ $gc_option == true ]; then
+  echo "Opcion -gc"
+  funtion_GC
+fi
+
+if [ $ge_option == true ]; then
+  echo "Opcion -ge"
+fi
 
 if [ -n "$listaProg" ]; then
   echo "Lista de programa es $listaProg"
