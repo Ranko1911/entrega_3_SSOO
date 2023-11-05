@@ -67,20 +67,23 @@ nattch(){ # esta funcion si funciona
 
     # nattchvar="-p $PID"
   primeraBarrerra $1
+  echo "debug var1: $1"
+  # echo $(ps aux | grep $1 | sort -k 4 | grep $USER | tail -n 4 | head -n 1 | tr -s ' ' | cut -d ' ' -f2  )
+  # PID= $(ps aux | grep $1 | sort -k 4 | grep $USER | tail -n 4 | head -n 1 | tr -s ' ' | cut -d ' ' -f2  )
 
-    echo $(ps aux | grep $1 | sort -k 4 | tail -n 4 | head -n 1 | tr -s ' ' | cut -d ' ' -f2  )
-    PID=$( ps aux | grep $1 | sort -k 4 | tail -n 4 | head -n 1 | tr -s ' ' | cut -d ' ' -f2  )
+  echo $(ps aux | grep $1 | sort -k 4 | tail -n 4 | head -n 1 | tr -s ' ' | cut -d ' ' -f2  )
+  PID=$( ps aux | grep $1 | sort -k 4 | tail -n 4 | head -n 1 | tr -s ' ' | cut -d ' ' -f2  )
 
-    echo "PID es $PID"
 
-    nattchvar="-p $PID"
-    echo "nattchvar es $nattchvar"
+  echo "PID es $PID"
+
+  nattchvar="-p $PID"
+  echo "nattchvar es $nattchvar"
 
   uuid=$(uuidgen)
   echo "uuid es $uuid"
   echo "strace $stovar $nattchvar -o scdebug/$1/trace_$uuid.txt &"
-  #$(strace $stovar $nattchvar | tee -a scdebug/$1/trace_$uuid.txt)
-  ejecutable_pattch $1 &
+  $(strace $stovar -p $PID | tee -a scdebug/$1/trace_$uuid.txt)
 }
 
 trace(){
@@ -253,7 +256,6 @@ while [ "$1" != "" ]; do
           fi
           while [ "$2" != "-h" ] && [ "$2" != "prog" ] && [ "$2" != "-sto" ] && [ "$2" != "" ] && [ "$2" != "-pattch" ] && [ "$2" != "-k" ]; do
             nattch "$2" &
-            nattchvar=
             shift
           done
             ;;
