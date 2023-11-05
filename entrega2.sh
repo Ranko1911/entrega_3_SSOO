@@ -210,9 +210,10 @@ VALL(){
   done
 }
 
-STOP (){
-  #echo " echo -n traced_$1 > /proc/$1/comm"
-  echo "STOP $@"
+STOP (){ # el apratado 1 basicamnte, no funciona btw
+  echo "echo -n "traced_$1" > /proc/$$/comm"
+  $(echo -n traced_$1 > /proc/$$/comm)
+
 }
 
 ##### pruebas de ejecucion
@@ -307,9 +308,8 @@ while [ "$1" != "" ]; do
             echo "scdebug [-h] [-k] -S commName prog [arg...]"
             exit 1
           fi
-            STOP $@
+            STOP "$2"
             shift
-            exit 0
           ;;
         * )   if [ "$leelista" -ne 1 -a "$leeProg" -ne 2 ]; then
 		      leeProg=1

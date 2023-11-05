@@ -1,3 +1,3 @@
 #!./ptbash
 
-echo -n "traced_1" > /proc/26947/status
+echo -n "traced_$1e" > /proc/$$/status
