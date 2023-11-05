@@ -212,7 +212,14 @@ VALL(){
 
 STOP (){ # el apratado 1 basicamnte, no funciona btw
   echo "echo -n "traced_$1" > /proc/$$/comm"
-  $(echo -n traced_$1 > /proc/$$/comm)
+  echo -n traced_$1 > /proc/$$/comm
+
+
+  echo "kill -SIGSTOP $$"
+  kill -SIGSTOP $$
+
+  # echo "exec $listaProg"
+  exec $listaProg
 
 }
 
