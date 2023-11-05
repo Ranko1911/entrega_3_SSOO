@@ -18,6 +18,7 @@ g_option=false
 gc_option=false
 ge_option=false
 lista_g=
+tabla=
 
 ##### Constantes
 TITLE="Información del sistema para $HOSTNAME" # $HOSTNAME muestra el nombre del host
@@ -52,7 +53,7 @@ usage2()
 
 ejecutable_base(){
   #echo "la uuid es $uuid "
-  strace $stovar $@  2>&1 | tee -a scdebug/$1/trace_$uuid.txt # ejecutar el comando 
+  strace $stovar $@ 2> /dev/null | tee -a scdebug/$1/trace_$uuid.txt  # ejecutar el comando 
 }
 
 programa() {
@@ -249,7 +250,7 @@ check_strace_availability() {
 llamada(){
   #echo "llamada $1"
   #echo "strace -p $1 -o scdebug/$1/trace_$uidd.txt | tee -a scdebug/$1/trace_$uidd.txt"
-  strace -p $1 -o scdebug/$1/trace_$uidd.txt | tee -a scdebug/$1/trace_$uidd.txt
+  strace -p $1 -o scdebug/$1/trace_$uuidd.txt /dev/null
 }
 
 funtion_G(){ #debe funcionar, no está comprobado
@@ -272,7 +273,14 @@ funtion_G(){ #debe funcionar, no está comprobado
 llamada2(){
   #echo "llamada $1"
   #echo "strace -p $1 -c -U | tee -a scdebug/$1/trace_$uuid.txt"
-  $(strace -p $1 -c -U name,max-time,total-time,calls | tee -a scdebug/$1/trace_$uidd.txt)
+  
+  tabla=$(strace -p $1 -c -U name,max-time,total-time,calls -S max-time 2>&1)
+  echo "$tabla"
+  # pillar la terecra fila de la tabla
+  echo "-------------------------"
+  echo $(echo "$tabla" | head -n 4 | tail -n 1)
+  #echo "strace -p $1 -c -U | tee -a scdebug/$1/trace_$uuid.txt | tail -n 3 | head -n 1"
+  
 }
 
 funtion_GC(){ #debe funcionar, no está comprobado
@@ -285,14 +293,19 @@ funtion_GC(){ #debe funcionar, no está comprobado
     primeraBarrerra $i
     uuid=$(uuidgen)
     #echo "${TEXT_GREEN}uidd es $uuid ${TEXT_RESET}"
+    echo "${TEXT_GREEN}Proceso $i "
     llamada2 $i &
+    echo "${TEXT_RESET}"
+    echo "$tabla"
     sleep 1
-    kill -SIGCONT $i
+    kill -SIGCONT $i 
   done
 
 }
 
-
+funtion_GE(){
+  echo "funtion_GE - la maquina virtual no admite la opcion error en el strace"
+}
 
 
 # check_strace_availability
