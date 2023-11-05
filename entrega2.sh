@@ -1,4 +1,4 @@
-#!/bin/bash
+#!./ptbash
 
 ##### Opciones por defecto
 listaProg=
