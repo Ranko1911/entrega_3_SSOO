@@ -48,7 +48,7 @@ usage2()
 
 ejecutable_base(){
   echo "la uuid es $uuid "
-  strace $stovar -o scdebug/$1/trace_$uuid.txt $@ || echo "Error en la ejecución de strace" 
+  strace $stovar $@  2>&1 | tee -a scdebug/$1/trace_$uuid.txt # ejecutar el comando 
 }
 
 programa() {
@@ -68,14 +68,16 @@ nattch(){ # esta funcion si funciona
     # nattchvar="-p $PID"
   primeraBarrerra $1
 
-    echo $(ps aux | grep $1 | sort -k 4 | tail -n 4 | head -n 1 | tr -s ' ' | cut -d ' ' -f2  )
+    #echo $(ps aux | grep $1 | sort -k 4 | tail -n 4 | head -n 1 | tr -s ' ' | cut -d ' ' -f2  )
     PID=$( ps aux | grep $1 | sort -k 4 | tail -n 4 | head -n 1 | tr -s ' ' | cut -d ' ' -f2  )
+
+    echo "PID es $PID"
 
     nattchvar="-p $PID"
 
   uuid=$(uuidgen)
   echo "strace $stovar $nattchvar -o scdebug/$1/trace_$uuid.txt &"
-  $(strace $stovar $nattchvar -o scdebug/$1/trace_$uuid.txt &)
+  $(strace $stovar $nattchvar | tee -a scdebug/$1/trace_$uuid.txt)
 }
 
 trace(){
@@ -151,7 +153,7 @@ primeraBarrerra(){
 }
 
 ejecutable_pattch(){
-  strace $stovar -p $1 -o scdebug/$1/trace_$uidd.txt || echo "Error en la ejecución del pattch" # ejecutar el comando
+  strace $stovar -p $1 -o scdebug/$1/trace_$uidd.txt | tee -a scdebug/$1/trace_$uidd.txt # ejecutar el comando
 }
 
 pattch(){
@@ -202,8 +204,12 @@ VALL(){
   done
 }
 
+STOP (){
+  #echo " echo -n traced_$1 > /proc/$1/comm"
+  echo "STOP $@"
+}
 
-# pruebas de ejecucion
+##### pruebas de ejecucion
 check_uuidgen_availability() {
     if command -v uuidgen &> /dev/null; then
         echo "uuidgen está disponible en el sistema."
@@ -228,33 +234,27 @@ check_strace_availability() {
 
 while [ "$1" != "" ]; do
     case $1 in
-        -h | --help )           
+        -h )           
             usage
             exit
             ;;         
-        # prog ) 
-        #     leelista=1;
-	      #     if [ "$leeProg" -eq 1 ]; then
-		    #       leeProg=2
-	      #     fi
-        # ;;    
         -sto )   
           stovar="$2"
           echo "sto es $stovar"
-        ;;   
+          ;;   
         -nattch )  
           if [ "$2" == "" ]; then
           echo "Se esperaban argumentos para -nattch ( progtoattach1 ... ))"
             usage
             exit 1
           fi
-          while [ "$2" != "-h" ] && [ "$2" != "prog" ] && [ "$2" != "-sto" ] && [ "$2" != "" ] && [ "$2" != "-pattch" ]; do
+          while [ "$2" != "-h" ] && [ "$2" != "prog" ] && [ "$2" != "-sto" ] && [ "$2" != "" ] && [ "$2" != "-pattch" ] && [ "$2" != "-k" ]; do
             nattch "$2" &
             nattchvar=""
             shift
           done
             ;;
-        -k | --kill )  
+        -k )  
           kill1
           shift
           ;;
@@ -264,7 +264,7 @@ while [ "$1" != "" ]; do
             usage
             exit 1
           fi
-          while [ "$2" != "-h" ] && [ "$2" != "prog" ] && [ "$2" != "-sto" ] && [ "$2" != "" ] && [ "$2" != "-nattch" ]; do
+          while [ "$2" != "-h" ] && [ "$2" != "prog" ] && [ "$2" != "-sto" ] && [ "$2" != "" ] && [ "$2" != "-nattch" ] && [ "$2" != "-k" ]; do
             pattch "$2"
             shift
           done
@@ -296,6 +296,16 @@ while [ "$1" != "" ]; do
           done
             exit 0
             ;;
+        -S )  
+          if [ "$2" == "" ]; then
+            echo "Se esperaba un argumento para -S ( prog1 [arg1 ...] ))"
+            echo "scdebug [-h] [-k] -S commName prog [arg...]"
+            exit 1
+          fi
+            STOP $@
+            shift
+            exit 0
+          ;;
         * )   if [ "$leelista" -ne 1 -a "$leeProg" -ne 2 ]; then
 		      leeProg=1
 		      listaProg+="$1 "
