@@ -1,0 +1,55 @@
+82340 --- stopped by SIGSTOP ---
+82377 execve("/dev/null", ["/dev/null"], 0x7fffede6f3f0 /* 45 vars */) = -1 EACCES (Permission denied)
+82377 +++ exited with 1 +++
+82340 --- SIGCONT {si_signo=SIGCONT, si_code=SI_USER, si_pid=82348, si_uid=1000} ---
+82340 write(1, "Lista de programa es sleep 1000 "..., 33) = 33
+82340 write(1, "La funci\303\263n 'prog' fue llamada c"..., 53) = 53
+82340 newfstatat(AT_FDCWD, "scdebug", {st_mode=S_IFDIR|0775, st_size=4096, ...}, 0) = 0
+82340 write(1, "La carpeta scdebug existe.\n", 27) = 27
+82340 newfstatat(AT_FDCWD, "scdebug/sleep", {st_mode=S_IFDIR|0775, st_size=4096, ...}, 0) = 0
+82340 write(1, "La carpeta sleep existe.\n", 25) = 25
+82340 rt_sigprocmask(SIG_BLOCK, NULL, [], 8) = 0
+82340 pipe2([3, 4], 0)                  = 0
+82340 rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+82340 rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+82340 rt_sigprocmask(SIG_BLOCK, NULL, [], 8) = 0
+82340 rt_sigprocmask(SIG_BLOCK, [INT TERM CHLD], [], 8) = 0
+82340 lseek(255, -1, SEEK_CUR)          = 13085
+82340 clone(child_stack=NULL, flags=CLONE_CHILD_CLEARTID|CLONE_CHILD_SETTID|SIGCHLD, child_tidptr=0x7ff7c7455a10) = 82378
+82340 rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+82340 --- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED, si_pid=82378, si_uid=1000, si_status=0, si_utime=0, si_stime=0} ---
+82340 wait4(-1, [{WIFEXITED(s) && WEXITSTATUS(s) == 0}], WNOHANG, NULL) = 82378
+82340 wait4(-1, 0x7fff3211c4d0, WNOHANG, NULL) = -1 ECHILD (No child processes)
+82340 rt_sigreturn({mask=[]})           = 0
+82340 rt_sigaction(SIGCHLD, {sa_handler=0x557e9fa93d10, sa_mask=[], sa_flags=SA_RESTORER|SA_RESTART, sa_restorer=0x7ff7c7242520}, {sa_handler=0x557e9fa93d10, sa_mask=[], sa_flags=SA_RESTORER|SA_RESTART, sa_restorer=0x7ff7c7242520}, 8) = 0
+82340 close(4)                          = 0
+82340 rt_sigprocmask(SIG_BLOCK, [INT], [], 8) = 0
+82340 read(3, "0c4bb309-93da-4f70-868f-1f2420cf"..., 512) = 37
+82340 read(3, "", 512)                  = 0
+82340 close(3)                          = 0
+82340 rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+82340 rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+82340 rt_sigaction(SIGINT, {sa_handler=0x557e9fa95dc0, sa_mask=[], sa_flags=SA_RESTORER, sa_restorer=0x7ff7c7242520}, {sa_handler=SIG_DFL, sa_mask=[], sa_flags=SA_RESTORER, sa_restorer=0x7ff7c7242520}, 8) = 0
+82340 rt_sigaction(SIGINT, {sa_handler=SIG_DFL, sa_mask=[], sa_flags=SA_RESTORER, sa_restorer=0x7ff7c7242520}, {sa_handler=0x557e9fa95dc0, sa_mask=[], sa_flags=SA_RESTORER, sa_restorer=0x7ff7c7242520}, 8) = 0
+82340 rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+82340 write(1, "strace   -o scdebug/sleep/trace_"..., 84) = 84
+82340 rt_sigprocmask(SIG_BLOCK, NULL, [], 8) = 0
+82340 rt_sigprocmask(SIG_BLOCK, [INT TERM CHLD], [], 8) = 0
+82340 rt_sigprocmask(SIG_BLOCK, [CHLD], [INT TERM CHLD], 8) = 0
+82340 rt_sigprocmask(SIG_SETMASK, [INT TERM CHLD], NULL, 8) = 0
+82340 clone(child_stack=NULL, flags=CLONE_CHILD_CLEARTID|CLONE_CHILD_SETTID|SIGCHLD, child_tidptr=0x7ff7c7455a10) = 82379
+82340 rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+82340 rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+82340 rt_sigprocmask(SIG_BLOCK, [CHLD], [CHLD], 8) = 0
+82340 rt_sigprocmask(SIG_SETMASK, [CHLD], NULL, 8) = 0
+82340 rt_sigprocmask(SIG_BLOCK, [CHLD], [CHLD], 8) = 0
+82340 rt_sigprocmask(SIG_SETMASK, [CHLD], NULL, 8) = 0
+82340 rt_sigprocmask(SIG_BLOCK, [CHLD], [CHLD], 8) = 0
+82340 rt_sigprocmask(SIG_SETMASK, [CHLD], NULL, 8) = 0
+82340 rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+82340 read(255, "\n", 8192)             = 1
+82340 read(255, "", 8192)               = 0
+82340 rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+82340 rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+82340 exit_group(0)                     = ?
+82340 +++ exited with 0 +++

@@ -53,17 +53,20 @@ usage2()
 
 ejecutable_base(){
   #echo "la uuid es $uuid "
-  strace $stovar $@ 2> /dev/null | tee -a scdebug/$1/trace_$uuid.txt  # ejecutar el comando 
+  strace $stovar $@ 2>&1 | tee -a scdebug/$1/trace_$uuid.txt  # ejecutar el comando 
 }
 
 programa() {
   primeraBarrerra $1
 
   uuid=$(uuidgen)
-  #echo "strace $stovar  -o scdebug/$1/trace_$uuid.txt $@" 
+  echo "strace $stovar  -o scdebug/$1/trace_$uuid.txt $@" 
   ejecutable_base $@ & 
 }
 
+ejecutable_nattch(){
+strace $stovar -p $PID -o scdebug/$1/trace_$uuid.txt| tee -a scdebug/$1/trace_$uuid.txt
+}
 
 nattch(){ # esta funcion si funciona 
   #echo "nattch $1"
@@ -77,18 +80,17 @@ nattch(){ # esta funcion si funciona
   # PID= $(ps aux | grep $1 | sort -k 4 | grep $USER | tail -n 4 | head -n 1 | tr -s ' ' | cut -d ' ' -f2  )
 
   #echo $(ps aux | grep $1 | sort -k 4 | tail -n 4 | head -n 1 | tr -s ' ' | cut -d ' ' -f2  )
-  PID=$( ps aux | grep $1 | sort -k 4 | tail -n 4 | head -n 1 | tr -s ' ' | cut -d ' ' -f2  )
+  PID=$( ps aux | grep $1 | grep $USER | sort -k 4 | tail -n 4 | head -n 1 | tr -s ' ' | cut -d ' ' -f2  )
 
 
   #echo "PID es $PID"
-
-  nattchvar="-p $PID"
   #echo "nattchvar es $nattchvar"
 
   uuid=$(uuidgen)
   #echo "uuid es $uuid"
   #echo "strace $stovar $nattchvar -o scdebug/$1/trace_$uuid.txt &"
-  $(strace $stovar -p $PID | tee -a scdebug/$1/trace_$uuid.txt)
+  ejecutable_nattch $1 $PID &
+  
 }
 
 trace(){
@@ -128,9 +130,9 @@ kill1(){ # funciona en maquina ajena, pero no en la local
       #echo "entra en kill1"
       if [ "$tracer_pid" -ne 0 ]; then
         #echo "kill -s SIGKILL $tracer_pid"
-        kill -s SIGKILL $tracer_pid &> /dev/null
+        kill -s SIGKILL $tracer_pid &> /dev/null # si pongo aqui el 2>&1 explota
         #echo "kill -s SIGKILL $pid"
-        kill -s SIGKILL $pid &> /dev/null
+        kill -s SIGKILL $pid &> /dev/null # aqui tambien
       fi
     fi
   done <<< "$ps_output"
@@ -191,7 +193,7 @@ visualizar(){
       echo "=============== ${TEXT_GREEN}TRACE FILE: $archivo_mas_reciente ${TEXT_RESET}================="
       echo "=============== ${TEXT_GREEN}TIME: $modi_date ${TEXT_RESET}=================================="
 
-      #cat "$directorio/$archivo_mas_reciente"
+      cat "$directorio/$archivo_mas_reciente"
     else
       echo "${TEXT_RED}El directorio está vacío o no contiene archivos.${TEXT_RESET}"
     fi
@@ -303,8 +305,37 @@ funtion_GC(){ #debe funcionar, no está comprobado
 
 }
 
+llamada3(){
+
+  #echo "llamada $1"
+  #echo "strace -p $1 -c -U | tee -a scdebug/$1/trace_$uuid.txt"
+  
+  tabla=$(strace -p $1 -c -U name,max-time,total-time,calls,errors -S errors 2>&1)
+  echo "$tabla"
+  # pillar la terecra fila de la tabla
+  echo "-------------------------"
+  echo $(echo "$tabla" | head -n 4 | tail -n 1)
+  #echo "strace -p $1 -c -U | tee -a scdebug/$1/trace_$uuid.txt | tail -n 3 | head -n 1"
+  
+}
+
 funtion_GE(){
-  echo "funtion_GE - la maquina virtual no admite la opcion error en el strace"
+  
+  lista_g=$(ps | grep traced_ | tr -s ' ' | cut -d ' ' -f2 | tr -s '\n' ' ')
+  #echo $lista_g
+
+  for i in $lista_g; do
+    #echo ${TEXT_GREEN} "Proceso $i" ${TEXT_RESET}
+    primeraBarrerra $i
+    uuid=$(uuidgen)
+    #echo "${TEXT_GREEN}uidd es $uuid ${TEXT_RESET}"
+    echo "${TEXT_GREEN}Proceso $i "
+    llamada3 $i &
+    echo "${TEXT_RESET}"
+    echo "$tabla"
+    sleep 1
+    kill -SIGCONT $i 
+  done
 }
 
 
@@ -328,7 +359,7 @@ while [ "$1" != "" ]; do
             exit 1
           fi
           while [ "$2" != "-h" ] && [ "$2" != "prog" ] && [ "$2" != "-sto" ] && [ "$2" != "" ] && [ "$2" != "-pattch" ] && [ "$2" != "-k" ]; do
-            nattch "$2" &
+            nattch "$2" 
             shift
           done
             ;;
@@ -432,6 +463,7 @@ fi
 
 if [ $ge_option == true ]; then
   echo "Opcion -ge"
+  funtion_GE
 fi
 
 if [ -n "$listaProg" ]; then

@@ -1,0 +1,5 @@
+restart_syscall(<... resuming interrupted read ...>) = 0
+close(1)                                = 0
+close(2)                                = 0
+exit_group(0)                           = ?
++++ exited with 0 +++

@@ -1,0 +1,5 @@
+82369 execve("/dev/null", ["/dev/null"], 0x7fffd4b7e450 /* 45 vars */) = -1 EACCES (Permission denied)
+82369 +++ exited with 1 +++
+82321 wait4(-1, 0x7ffcfab7e840, 0, NULL) = ? ERESTARTSYS (To be restarted if SA_RESTART is set)
+82321 --- SIGCONT {si_signo=SIGCONT, si_code=SI_USER, si_pid=82348, si_uid=1000} ---
+82321 wait4(-1, 
